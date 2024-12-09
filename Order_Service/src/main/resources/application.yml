@@ -1,0 +1,75 @@
+server:
+  port:
+    9002
+
+spring:
+  kafka:
+    producer:
+      bootstrap-servers:
+        - localhost:9092
+
+  application:
+    name: ORDER-SERVICE
+
+  config:
+    import: configserver:http://localhost:9005
+
+
+
+order:
+  producer:
+    topic:
+      name: ordertopic
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      orderservice:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        permittedNumberOfCallsInHalfOpenState: 3
+        waitDurationInOpenState: 5s
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+
+
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/microservices
+#    username: root
+#    password: root123
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#    properties:
+#      # dialect: org.hibernate.dialect.MySQLDialect
+#      format_sql: true
+
+#
+#eureka:
+#  instance:
+#    hostname: localhost
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/
+
+

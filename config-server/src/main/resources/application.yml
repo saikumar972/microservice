@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: CONFIG-SERVER
+
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/saikumar972/Javatechie
+
+server:
+  port: 9005
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
